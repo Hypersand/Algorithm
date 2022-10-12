@@ -10,16 +10,21 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        String N = br.readLine();
-        Integer[] arr = new Integer[N.length()];
-        for (int i = 0; i < N.length(); i++) {
-            arr[i] = Integer.parseInt(String.valueOf(N.charAt(i)));
+        int N = Integer.parseInt(br.readLine());
+        int[] counting = new int[10];
+
+        while (N != 0) {
+            counting[N%10]++;
+            N /= 10;
         }
-        Arrays.sort(arr, Collections.reverseOrder());
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
+
+        for (int i = 9; i >= 0; i--) {
+            if (counting[i] != 0) {
+                for (int j = 0; j < counting[i]; j++) {
+                    sb.append(i);
+                }
+            }
         }
         System.out.println(sb);
-
     }
 }
