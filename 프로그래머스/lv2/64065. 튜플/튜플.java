@@ -10,7 +10,7 @@ class Solution {
         Arrays.sort(arr,new Comparator<String>(){
             public int compare(String o1, String o2){
                 
-                return Integer.compare(o1.length(), o2.length());
+                return o1.length()-o2.length();
             }
         });
         
