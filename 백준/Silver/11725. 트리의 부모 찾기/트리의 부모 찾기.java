@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -33,27 +34,42 @@ public class Main {
             list[b].add(a);
         }
 
-        dfs(1);
+//        dfs(1);
+        bfs(1);
 
         for (int i = 2; i <= N; i++) {
             System.out.println(ans[i]);
         }
-
-
     }
 
-    private static void dfs(int start) {
-        if (!visited[start]) {
-            visited[start] = true;
-            for (int a : list[start]) {
-                if (!visited[a]) {
-                    ans[a] = start;
-                    dfs(a);
+    private static void bfs(int start) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+        visited[start] = true;
+
+        while (!queue.isEmpty()) {
+            int a = queue.poll();
+            for (int tmp : list[a]) {
+                if (!visited[tmp]) {
+                    visited[tmp] = true;
+                    queue.add(tmp);
+                    ans[tmp] = a;
                 }
             }
         }
-
-
     }
+
+//    private static void dfs(int start) {
+//        if (!visited[start]) {
+//            visited[start] = true;
+//            for (int a : list[start]) {
+//                if (!visited[a]) {
+//                    ans[a] = start;
+//                    dfs(a);
+//                }
+//            }
+//        }
+//    }
+//
 
 }
