@@ -26,7 +26,7 @@ public class Main {
                return (tmp*tmp)%c;
            }
            else {
-               return (tmp * tmp % c) * a % c;
+               return (tmp*((tmp*(a%c))%c))%c;
            }
        }
     }
