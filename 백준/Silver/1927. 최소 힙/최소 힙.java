@@ -7,24 +7,21 @@ import java.util.PriorityQueue;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
         StringBuilder sb = new StringBuilder();
-
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
         int N = Integer.parseInt(br.readLine());
         for (int i = 0; i < N; i++) {
-            int a = Integer.parseInt(br.readLine());
-            if (a != 0) {
-                queue.add(a);
-            }
-            else {
-                if(queue.isEmpty()) {
-                    sb.append(0+"\n");
+            int tmp = Integer.parseInt(br.readLine());
+            if (tmp == 0) {
+                if (queue.isEmpty()) {
+                    sb.append("0").append("\n");
                 }
                 else {
-                    sb.append(queue.poll()+"\n");
-
+                    sb.append(queue.poll()).append("\n");
                 }
-
+            }
+            else {
+                queue.add(tmp);
             }
         }
 
