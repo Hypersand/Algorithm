@@ -9,11 +9,12 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+
     private static int M;
     private static int [] arr;
     private static int [] arr2;
     private static boolean [] visited;
-    private static Map<String, Integer> map = new HashMap<>();
+//    private static Map<String, Integer> map = new HashMap<>();
     private static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
@@ -43,18 +44,20 @@ public class Main {
             for (int i = 0; i < M; i++) {
                 str += arr2[i] + " ";
             }
-            if (!map.containsKey(str)) {
-                map.put(str, 1);
+//            if (!map.containsKey(str)) {
+//                map.put(str, 1);
                 sb.append(str);
                 sb.append("\n");
-            }
+//            }
         }
         else {
+            int last = -1;
             for (int i = 0; i < arr.length; i++) {
-                if (!visited[i]) {
+                if (!visited[i] && last != arr[i]) {
                     visited[i] = true;
                     arr2[length] = arr[i];
-                    backTracking(length+1);
+                    last = arr[i];
+                    backTracking(length + 1);
                     visited[i] = false;
                 }
             }
