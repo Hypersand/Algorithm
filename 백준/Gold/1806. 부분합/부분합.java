@@ -2,7 +2,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.Key;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -15,29 +14,24 @@ public class Main {
         int[] arr = new int[N+1];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            arr[i] += arr[i-1] + Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
+
+        int start = 0;
+        int end = 0;
         int minLength = Integer.MAX_VALUE;
+        int sum = 0;
 
-        for (int i = 1; i <= N; i++) {
-            if (i == 1) {
-                if (arr[i] >= S) {
-                    System.out.println(1);
-                    return;
-                }
+        while (end <= N) {
+
+            if (sum >= S) {
+                sum -= arr[start++];
+                minLength = Math.min(minLength, end - start+1);
             }
-
-            if (arr[i] >= S) {
-                minLength = Math.min(minLength, i);
-            }
-
-            for (int j = i - 1; j > 0; j--) {
-                if (arr[i] - arr[j] >= S) {
-                    minLength = Math.min(minLength, i - j);
-                    break;
-                }
+            else {
+                sum += arr[end++];
             }
         }
 
@@ -47,5 +41,7 @@ public class Main {
         else {
             System.out.println(minLength);
         }
+
+
     }
 }
