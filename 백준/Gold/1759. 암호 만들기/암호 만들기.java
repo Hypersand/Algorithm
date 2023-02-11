@@ -7,40 +7,39 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+    private static char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+    private static char[] words;
+    private static boolean[] used = new boolean[26];
     private static int L;
-    private static int C;
-    private static boolean [] used;
-    private static String[] str;
     private static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
         L = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        used = new boolean[C];
+        int C = Integer.parseInt(st.nextToken());
+        words = new char[C];
 
-        str = new String[C];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < C; i++) {
-            str[i] = st.nextToken();
+            words[i] = st.nextToken().charAt(0);
         }
-        Arrays.sort(str);
 
-        comb(0,0);
+        Arrays.sort(words);
+
+        backTracking(0, 0);
+
         System.out.println(sb);
+
     }
 
-    private static void comb(int length, int index) {
-        if (length == L) {
+    private static void backTracking(int index, int cnt) {
+        if (cnt == L) {
             int count1 = 0;
             int count2 = 0;
-            String word = "";
-            for (int i = 0; i < C; i++) {
+            for (int i = 0; i < 26; i++) {
                 if (used[i]) {
-                    word += str[i];
-                    if (str[i].equals("a") || str[i].equals("e") || str[i].equals("i") || str[i].equals("o") || str[i].equals("u")) {
+                    if (i + 'a' == 'a' || i + 'a' == 'e' || i + 'a' == 'i' || i + 'a' == 'o' || i + 'a' == 'u') {
                         count1++;
                     }
                     else {
@@ -49,16 +48,25 @@ public class Main {
                 }
             }
 
-            if (count1 >= 1 && count2 >= 2) {
-                sb.append(word + "\n");
+            if (count1>=1&&count2>=2) {
+                String ans = "";
+                for (int i = 0; i < 26; i++) {
+                    if (used[i]) {
+                        ans += (char) (i + 'a');
+                    }
+                }
+                sb.append(ans).append("\n");
             }
+
             return;
         }
 
-        for (int i = index; i < C; i++) {
-            used[i] = true;
-            comb(length + 1,i+1);
-            used[i] = false;
+        for (int i = index; i < words.length; i++) {
+            if (!used[words[i]-'a']) {
+                used[words[i]-'a'] = true;
+                backTracking(i + 1, cnt + 1);
+                used[words[i]-'a'] = false;
+            }
         }
     }
 }
