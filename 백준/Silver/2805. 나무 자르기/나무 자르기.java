@@ -5,45 +5,49 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    
-    private static int [] trees;
-    private static int max = 0;
+
+    private static int N;
+    private static int M;
+    private static int[] trees;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        trees = new int[N];
-        int max = 0;
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        trees = new int[N + 1];
 
+        int max = 0;
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i <= N; i++) {
             trees[i] = Integer.parseInt(st.nextToken());
-            max = Math.max(trees[i], max);
+            max = Math.max(max, trees[i]);
         }
 
-        System.out.println(binarySearch(M, 0, max));
+        System.out.println(binarySearch(0, max));
     }
-    private static int binarySearch(long key, int start, int end) {
-        int mid = (start + end) / 2;
-        long woodCut = 0;
 
-        if(start <= end) {
-            for (int i = 0; i < trees.length; i++) {
-                if (mid < trees[i]) {
-                    woodCut += trees[i] - mid;
+    private static int binarySearch(int start, int end) {
+        int mid = (start + end) / 2;
+        if (start <= end) {
+            long sum = 0;
+            for (int i = 1; i <= N; i++) {
+                if (trees[i] > mid) {
+                    sum += trees[i] - mid;
+                    if (sum > M) {
+                        return binarySearch(mid+1, end);
+                    }
                 }
             }
-            if (key == woodCut) {
+
+            if (sum == M) {
                 return mid;
             }
-            else if (key < woodCut) {
-                return binarySearch(key ,mid+1, end);
+
+            if (sum < M) {
+                return binarySearch(start, mid-1);
             }
-            else {
-                return binarySearch(key, start, mid-1);
-            }
+
         }
         return mid;
     }
