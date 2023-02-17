@@ -56,14 +56,16 @@ public class Main {
         });
         pq.add(new Node(start, 0));
         dist[start] = 0;
-
+        
         while (!pq.isEmpty()) {
             Node now = pq.poll();
-
-            if (!visited[now.v]) {
-                visited[now.v] = true;
+            
+            if (visited[now.v]) {
+                continue;
             }
-
+            
+            visited[now.v] = true;
+            
             for (Node next : list[now.v]) {
                 if (!visited[next.v] && dist[next.v] > now.cost + next.cost) {
                     dist[next.v] = now.cost + next.cost;
@@ -75,7 +77,7 @@ public class Main {
         }
 
     }
-    
+
     private static class Node  {
         int v;
         int cost;
