@@ -3,21 +3,17 @@ import java.util.*;
 class Solution {
 
     public String[] words = {"A","E","I","O","U"};
-    public int answer = 0;
-    public int count = 0;
     public List<String> list = new ArrayList<>();
     
     public int solution(String word) {
         
-        for (int i = 0; i<5; i++) {
-            makeWord(words[i]);    
-        }
+        makeWord("",0);
         
         int answer = 0;
         
         for (int i = 0; i<list.size(); i++) {
             if(list.get(i).equals(word)) {
-                answer = i + 1;
+                answer = i;
                 break;
             }
         }
@@ -26,8 +22,8 @@ class Solution {
     }
     
     
-    public void makeWord(String str) {
-        if(str.length() > 5) {
+    public void makeWord(String str, int length) {
+        if(length > 5) {
             return;
         }
         
@@ -37,7 +33,7 @@ class Solution {
         
         
         for (int i = 0; i<5; i++) {
-            makeWord(str+words[i]);
+            makeWord(str+words[i],length+1);
         } 
         
     }
