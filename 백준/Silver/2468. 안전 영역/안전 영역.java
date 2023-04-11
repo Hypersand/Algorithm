@@ -9,10 +9,10 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    public static int[][] arr1;
+    public static int[][] arr;
     public static boolean[][] flooding;
     public static boolean[][] visited;
-    
+
     public static int N;
 
     public static int[] dx = {-1, 1, 0, 0};
@@ -25,7 +25,7 @@ public class Main {
         StringTokenizer st;
 
         N = Integer.parseInt(br.readLine());
-        arr1 = new int[N][N];
+        arr = new int[N][N];
 
         int maxNumber = 0;
 
@@ -33,44 +33,43 @@ public class Main {
             st = new StringTokenizer(br.readLine());
 
             for (int j = 0; j < N; j++) {
-                arr1[i][j] = Integer.parseInt(st.nextToken());
-                maxNumber = Math.max(maxNumber, arr1[i][j]);
+                arr[i][j] = Integer.parseInt(st.nextToken());
+                maxNumber = Math.max(maxNumber, arr[i][j]);
             }
         }
 
-        int maxCount = 0;
 
         if (maxNumber == 1) {
             System.out.println(1);
-        }
+        } else {
+            int maxCount = 0;
 
-        else {
             for (int t = 1; t < maxNumber; t++) {
                 flooding = new boolean[N][N];
                 visited = new boolean[N][N];
 
-                for (int i = 0; i < N; i++) {
-                    for (int j = 0; j < N; j++) {
-                        if (arr1[i][j] <= t) {
-                            flooding[i][j] = true;
-                        }
-                    }
-                }
+//                for (int i = 0; i < N; i++) {
+//                    for (int j = 0; j < N; j++) {
+//                        if (arr[i][j] <= t) {
+//                            flooding[i][j] = true;
+//                        }
+//                    }
+//                }
 
-                maxCount = Math.max(find(), maxCount);
+                maxCount = Math.max(find(t), maxCount);
             }
 
             System.out.println(maxCount);
         }
     }
 
-    public static int find() {
+    public static int find(int rainCount) {
 
         int count = 0;
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (!flooding[i][j] && !visited[i][j]) {
+                if (arr[i][j] > rainCount && !visited[i][j]) {
                     count++;
                     visited[i][j] = true;
                     queue.add(new Point(i, j));
@@ -81,7 +80,7 @@ public class Main {
                             int nx = p.x + dx[t];
                             int ny = p.y + dy[t];
                             if (nx >= 0 && ny >= 0 && nx < N && ny < N) {
-                                if (!flooding[nx][ny] && !visited[nx][ny]) {
+                                if (arr[nx][ny] > rainCount && !visited[nx][ny]) {
                                     queue.add(new Point(nx, ny));
                                     visited[nx][ny] = true;
                                 }
