@@ -34,9 +34,4 @@ class Solution {
         
         return cnt;
     }
-    
-    public class fruit {
-        int idx;
-        int count;
-    }
 }
