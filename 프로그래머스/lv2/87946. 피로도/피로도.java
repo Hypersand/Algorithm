@@ -36,7 +36,6 @@ class Solution {
             if(!visited[i]&&dungeons[i][0]<=n) {
                 visited[i] = true;
                 n -= dungeons[i][1];
-                System.out.println(n);
                 find(dungeons,n,cnt+1);
                 n += dungeons[i][1];
                 visited[i] = false;
