@@ -13,31 +13,15 @@ class Solution {
         return maxCount;
     }
     
-    public void find(int[][] dungeons, int n, int cnt) {
-        if(n<=0) {
-            int count = 0;
-            for (int i = 0; i<dungeons.length; i++) {
-                if(visited[i]) {
-                    count++;
-                }
-            }
-            
-            if(n==0) {
-                maxCount = Math.max(maxCount,count);
-            }
-            else {
-                maxCount = Math.max(maxCount,count-1);    
-            }
-    
-            return;
-        }
+    public void find(int[][] dungeons, int k, int cnt) {
+        
         
         for (int i = 0; i<dungeons.length; i++) {
-            if(!visited[i]&&dungeons[i][0]<=n) {
+            if(!visited[i]&&dungeons[i][0]<=k) {
                 visited[i] = true;
-                n -= dungeons[i][1];
-                find(dungeons,n,cnt+1);
-                n += dungeons[i][1];
+                k -= dungeons[i][1];
+                find(dungeons,k,cnt+1);
+                k += dungeons[i][1];
                 visited[i] = false;
             }
         }
