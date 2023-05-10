@@ -56,13 +56,11 @@ public class Main {
                 ongoingMeetings.poll();
                 ongoingMeetings.add(nextMeeting);
             }
-
-            roomCnt = Math.max(roomCnt, ongoingMeetings.size());
+            
+//            roomCnt = Math.max(roomCnt, ongoingMeetings.size());
         }
 
-        System.out.println(roomCnt);
-
-
+        System.out.println(ongoingMeetings.size());
 
     }
 
