@@ -2,50 +2,38 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] numbers, int target) {
-        Queue<node> queue = new LinkedList<>();
-        queue.add(new node(numbers[0],0));
-        queue.add(new node(-numbers[0],0));
-        int n = 0;
+        return bfs(numbers, target, numbers[0]) + 
+            bfs(numbers, target, numbers[0]*(-1));
+    }
+    
+    public int bfs(int[] numbers, int target, int start) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(1, start));
         int count = 0;
-        
         while(!queue.isEmpty()) {
-            node a = queue.poll();
-            for(int i = 0; i<2; i++) {
-                int newNum = 0;
-                int newLoc = a.loc + 1;
-                if(newLoc>=numbers.length) {
-                    break;
+            Node node = queue.poll();
+            
+            if(node.index == numbers.length) {
+                if(node.result == target) {
+                    count++;
                 }
-                
-                if(i == 0) {
-                    newNum = a.num + numbers[newLoc];
-                }
-                else {
-                    newNum = a.num - numbers[newLoc];
-                }
-                
-                if(newLoc<numbers.length) {
-                    if(newLoc == numbers.length-1&& newNum == target) {
-                        count++;
-                    }
-                    else {
-                    queue.add(new node(newNum,newLoc));
-                }
-                }
-                
+            }
+            
+            else {
+                queue.add(new Node(node.index+1,node.result+numbers[node.index]));
+                queue.add(new Node(node.index+1,node.result-numbers[node.index]));
             }
         }
-        
         return count;
     }
 }
 
-class node {
-    int num;
-    int loc;
+class Node {
+    public int index;
+    public int result;
     
-    public node(int num, int loc) {
-        this.num = num;
-        this.loc = loc;
-    }
+    public Node(int index, int result) {
+        this.index = index;
+        this.result = result;
+    }   
 }
