@@ -1,68 +1,71 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-
     private static int N;
-    private static int [] arr;
-    private static int [] tool;
+    private static int[] numbers;
+    private static int[] operators;
+    private static int max = Integer.MIN_VALUE;
     private static int min = Integer.MAX_VALUE;
-    private static int max = -1000000000;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
+        numbers = new int[N];
+        operators = new int[4];
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        arr = new int[N];
-        tool = new int[4];
         for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+            numbers[i] = Integer.parseInt(st.nextToken());
         }
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < 4; i++) {
-            tool[i] = Integer.parseInt(st.nextToken());
+            operators[i] = Integer.parseInt(st.nextToken());
         }
 
-        backTracking(0);
+        find(0, numbers[0]);
+
         System.out.println(max);
         System.out.println(min);
     }
 
-    private static void backTracking(int index) {
-        if(index==N-1) {
-            max = Math.max(max, arr[N-1]);
-            min = Math.min(min, arr[N - 1]);
+    public static void find(int index, int result) {
+        if (index == N - 1) {
+            max = Math.max(result, max);
+            min = Math.min(result, min);
             return;
         }
 
         for (int i = 0; i < 4; i++) {
-            int tmp = 0;
-            int a = arr[index + 1];
-            if(tool[i]!=0) {
+            if (operators[i] != 0) {
+                int tmp = result;
                 if (i == 0) {
-                    tmp = arr[index] + arr[index + 1];
-                    tool[i]--;
-                } else if (i == 1) {
-                    tmp = arr[index] - arr[index + 1];
-                    tool[i]--;
-                } else if (i == 2) {
-                    tmp = arr[index] * arr[index + 1];
-                    tool[i]--;
-                } else {
-                    tmp = arr[index] / arr[index + 1];
-                    tool[i]--;
+                    result += numbers[index + 1];
+                    operators[i]--;
                 }
-                arr[index+1] = tmp;
-                backTracking(index+1);
-                arr[index+1] = a;
-                tool[i]++;
-            }
+                else if (i == 1) {
+                    result -= numbers[index + 1];
+                    operators[i]--;
+                }
 
+                else if (i == 2) {
+                    result *= numbers[index + 1];
+                    operators[i]--;
+
+                }
+                else {
+                    result /= numbers[index + 1];
+                    operators[i]--;
+                }
+
+                find(index + 1, result);
+                operators[i]++;
+                result = tmp;
+            }
         }
     }
-
 }
+
