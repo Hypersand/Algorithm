@@ -9,12 +9,12 @@ class Solution {
         Map<String, Integer> mapB = new HashMap<>();
         
         for (int i = 1; i<arrA.length; i++) {
-            if(!arrA[i-1].matches("^[a-zA-Z]*$") || !arrA[i].matches("^[a-zA-Z]*$")) continue;
+            if(!arrA[i-1].matches("^[A-Z]*$") || !arrA[i].matches("^[A-Z]*$")) continue;
             String tmp = arrA[i-1] + arrA[i];
             mapA.put(tmp, mapA.getOrDefault(tmp, 0) + 1);
         }
         for (int i = 1; i<arrB.length; i++) {
-            if(!arrB[i-1].matches("^[a-zA-Z]*$") || !arrB[i].matches("^[a-zA-Z]*$")) continue;
+            if(!arrB[i-1].matches("^[A-Z]*$") || !arrB[i].matches("^[A-Z]*$")) continue;
             String tmp = arrB[i-1] + arrB[i];
             mapB.put(tmp, mapB.getOrDefault(tmp, 0) + 1);
         }
