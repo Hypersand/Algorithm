@@ -9,12 +9,8 @@ class Solution {
         }
         for (int i = 0; i<report.length; i++) {
             String[] arr = report[i].split(" ");
-            for (int j = 0; j<id_list.length; j++) {
-                if(arr[1].equals(id_list[j])) {
-                    if(!lists[j].contains(arr[0])) {
-                        lists[j].add(arr[0]);
-                    }
-                }
+            if(!lists[map.get(arr[1])].contains(arr[0])) {
+                lists[map.get(arr[1])].add(arr[0]);
             }
         }
         
