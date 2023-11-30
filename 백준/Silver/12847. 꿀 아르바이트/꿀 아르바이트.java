@@ -16,21 +16,17 @@ public class Main {
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
-        Queue<Integer> queue = new LinkedList<>();
         long sum = 0;
         long max = 0;
-        for (int i = 0; i < n; i++) {
-            if (queue.size() < m) {
-                queue.add(arr[i]);
-                sum += arr[i];
-            } else {
-                if (max < sum) {
-                    max = sum;
-                }
-                sum -= queue.poll();
-                sum += arr[i];
-                queue.add(arr[i]);
-            }
+        for (int i = 0; i < m; i++) {
+            max += arr[i];
+        }
+        sum = max;
+
+        for (int i = 0; i < n - m; i++) {
+            sum -= arr[i];
+            sum += arr[i + m];
+            max = Math.max(sum, max);
         }
         System.out.println(max);
     }
