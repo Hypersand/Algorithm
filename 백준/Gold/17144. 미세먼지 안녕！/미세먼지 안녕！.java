@@ -11,7 +11,7 @@ public class Main {
     private static int C;
     private static int T;
     private static List<Point> airCleaners;
-    private static List<Point> dusts;
+    private static Queue<Point> dusts;
     private static int[] dx = {-1, 1, 0, 0};
     private static int[] dy = {0, 0, -1, 1};
     private static int[] airDx1 = {0, -1, 0, 1}; //위쪽 공기청정기
@@ -27,7 +27,7 @@ public class Main {
         T = Integer.parseInt(st.nextToken());
         arr = new int[R][C];
         airCleaners = new ArrayList<>();
-        dusts = new ArrayList<>();
+        dusts = new LinkedList<>();
         for (int i = 0; i < R; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < C; j++) {
@@ -56,9 +56,9 @@ public class Main {
     }
 
     private static void bfs() {
-        Map<String, Integer> map = new HashMap<>();
-        for (int i = 0; i < dusts.size(); i++) {
-            Point p = dusts.get(i);
+        int[][] arr2 = new int[R][C];
+        while (!dusts.isEmpty()) {
+            Point p = dusts.poll();
             int directionCnt = 0;
             for (int j = 0; j < 4; j++) {
                 int nx = p.x + dx[j];
@@ -66,8 +66,7 @@ public class Main {
                 if (nx >= 0 && ny >= 0 && nx < R && ny < C) {
                     if (arr[nx][ny] != -1) {
                         directionCnt++;
-                        String str = nx + " " + ny;
-                        map.put(str, map.getOrDefault(str, 0) + arr[p.x][p.y] / 5);
+                        arr2[nx][ny] += arr[p.x][p.y] / 5;
                     }
                 }
             }
@@ -76,9 +75,8 @@ public class Main {
 
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                String key = i + " " + j;
-                if (map.containsKey(key)) {
-                    arr[i][j] += map.get(key);
+                if (arr2[i][j] != 0) {
+                    arr[i][j] += arr2[i][j];
                 }
             }
         }
@@ -126,7 +124,6 @@ public class Main {
             tmp = tmp2;
         }
 
-        dusts.clear();
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
                 if (arr[i][j] > 0) {
