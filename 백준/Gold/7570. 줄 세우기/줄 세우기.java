@@ -1,23 +1,22 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        int[] arr = new int[N];
         int[] dp = new int[N + 1];
         StringTokenizer st = new StringTokenizer(br.readLine());
+        int maxLength = 0;
         for (int i = 0; i < N; i++) {
-            int tmp = Integer.parseInt(st.nextToken());
-            dp[tmp] = dp[tmp - 1] + 1;
+            int num = Integer.parseInt(st.nextToken());
+            dp[num] = dp[num - 1] + 1;
+            maxLength = Math.max(dp[num], maxLength);
         }
-        Arrays.sort(dp);
-        System.out.println(N - dp[N]);
+        System.out.println(N - maxLength);
+
+
     }
 }
