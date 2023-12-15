@@ -1,31 +1,27 @@
 import java.util.*;
 class Solution {
     public int solution(int storey) {
-        String tmp = Integer.toString(storey);
-    	int[] arr = new int[tmp.length()];
-    	for(int i=0; i<tmp.length(); i++) {
-    		arr[i] = tmp.charAt(i) - '0';
-    	}
-    	
-    	int answer = 0;
-    	
-    	for(int i=arr.length-1; i>=0; i--) {
-    		if(arr[i] > 5) {
-    			answer += 10-arr[i];
-    			
-    			if(i==0) answer++;
-    			else arr[i-1]++;
-    		}
-    		else if(arr[i]==5 && i>0 && arr[i-1]>=5) {
-    			arr[i-1]++;
-    			answer += 5;
-    		}
-    		else {
-    			answer += arr[i];
-    		}
-
-    	}
-    	
-    	return answer;
+        int cnt = 0;
+        while (storey > 0) {
+            int num = storey % 10;
+            storey /= 10;
+            if (num < 5) {
+                cnt += num;
+            } else if (num > 5) {
+                cnt += 10 - num;
+                storey++;
+            } else {
+                //만약 5일때 앞자리가 5 이상이라면 올린다.
+                if (storey % 10 >= 5) {
+                    cnt += 5;
+                    storey++;
+                } 
+                //앞자리가 5보다 작다면 내린다.
+                else {
+                    cnt += 5;
+                }
+            }
+        }
+        return cnt;
     }
 }
