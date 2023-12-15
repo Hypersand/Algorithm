@@ -10,41 +10,41 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int K = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
-        Map<String, Integer> map = new HashMap<>();
-        int idx = 0;
+        Map<String, Integer> map = new HashMap<>(); //학번, 순서
         for (int i = 0; i < L; i++) {
-            String num = br.readLine();
-            map.put(num, idx++);
+            String str = br.readLine();
+            map.put(str, i);
         }
 
-        List<Student> list = new ArrayList<>();
+        List<Node> list = new ArrayList<>();
         for (Entry<String, Integer> entry : map.entrySet()) {
-            list.add(new Student(entry.getKey(), entry.getValue()));
+            list.add(new Node(entry.getKey(), entry.getValue()));
         }
         Collections.sort(list);
         StringBuilder sb = new StringBuilder();
-        int cnt = 0;
-        for (int i = 0; i < list.size(); i++) {
-            if (cnt < K) {
+        if (K > list.size()) {
+            for (int i = 0; i < list.size(); i++) {
                 sb.append(list.get(i).num).append("\n");
-                cnt++;
             }
-
+        } else {
+            for (int i = 0; i < K; i++) {
+                sb.append(list.get(i).num).append("\n");
+            }
         }
         System.out.println(sb);
     }
 
-    private static class Student implements Comparable<Student> {
+    private static class Node implements Comparable<Node> {
         String num;
         int idx;
 
-        public Student(String num, int idx) {
+        public Node(String num, int idx) {
             this.num = num;
             this.idx = idx;
         }
 
         @Override
-        public int compareTo(Student o) {
+        public int compareTo(Node o) {
             return this.idx - o.idx;
         }
     }
