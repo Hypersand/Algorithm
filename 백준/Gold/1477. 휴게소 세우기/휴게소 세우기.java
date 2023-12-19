@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,32 +11,32 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
-        int[] arr = new int[N + 2];
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i < N + 1; i++) {
+        int[] arr = new int[N + 2];
+        arr[0] = 0;
+        for (int i = 1; i <= N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
-        arr[0] = 0;
         arr[N + 1] = L;
         Arrays.sort(arr);
 
-        int left = 1;
-        int right = L-1;
-
-        while(left <= right) {
-            int mid = (left + right) / 2;
-            int sum = 0;
-
-            for(int i=1; i<arr.length; i++) {
-                sum+=(arr[i] - arr[i-1] - 1) / mid;
+        int start = 1;
+        int end = L - 1;
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            int cnt = 0;
+            for (int i = 1; i < arr.length; i++) {
+                int length = arr[i] - arr[i - 1];
+                cnt += (length - 1) / mid;
             }
 
-            if(sum > M) {
-                left = mid+1;
+            if (cnt > M) {
+                start = mid + 1;
             } else {
-                right = mid-1;
+                end = mid - 1;
             }
         }
-        System.out.println(left);
+
+        System.out.println(start);
     }
 }
