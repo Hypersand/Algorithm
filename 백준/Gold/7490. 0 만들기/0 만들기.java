@@ -1,57 +1,71 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Iterator;
-
-import static java.util.stream.Collectors.toList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-    private static int N;
     private static StringBuilder sb;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
-        for (int i = 0; i < T; i++) {
-            N = Integer.parseInt(br.readLine());
+        int t = Integer.parseInt(br.readLine());
+        for (int i = 0; i < t; i++) {
             sb = new StringBuilder();
-            comb(1, "1");
+            int N = Integer.parseInt(br.readLine());
+            comb(N, 1, "1");
             System.out.println(sb);
         }
     }
 
-    private static void comb(int num, String s) {
-        if (num == N) {
-            String str = s.replaceAll(" ", "");
-            Iterator<Integer> it= Arrays.stream(str.split("[+,-]"))
-                    .map(Integer::parseInt)
-                    .collect(toList()).iterator();
-            int result = it.next();
-            for(int i=0; i<str.length(); i++) {
-                if(str.charAt(i) == '+') {
-                    result += it.next();
-                }else if(str.charAt(i) == '-') {
-                    result -= it.next();
-                }
-            }
-            if (result == 0) {
-                sb.append(s).append("\n");
+    private static void comb(int N, int idx, String str) {
+        if (idx == N) {
+            if (isZero(N, str)) {
+                sb.append(str).append("\n");
             }
             return;
         }
-
-
         for (int i = 0; i < 3; i++) {
-            if (i == 0) {
-                comb(num + 1, s + " " + (num + 1));
-            } else if (i == 1) {
-                comb(num + 1, s + "+" + (num + 1));
-            } else {
-                comb(num + 1, s + "-" + (num + 1));
+            if (i == 1) {
+                comb(N, idx + 1, str + "+" + (idx + 1));
+                continue;
+            }
+            if (i == 2) {
+                comb(N, idx + 1, str + "-" + (idx + 1));
+                continue;
+            }
+            comb(N, idx + 1, str + " " + (idx + 1));
+        }
 
+    }
+
+    private static boolean isZero(int N, String str) {
+        str = str.replaceAll(" ", "");
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '+' || str.charAt(i) == '-') {
+                list.add(String.valueOf(str.charAt(i)));
             }
         }
 
+        String[] arr = str.split("[+\\-]");
+        if (arr.length == 1) {
+            return false;
+        }
 
+        int answer = Integer.parseInt(arr[0]);
+        int idx = 0;
+        for (int i = 1; i < arr.length; i++) {
+            if (list.get(idx).equals("+")) {
+                answer += Integer.parseInt(arr[i]);
+            } else {
+                answer -= Integer.parseInt(arr[i]);
+            }
+            idx++;
+        }
+
+        if (answer == 0) {
+            return true;
+        }
+        return false;
     }
 }
