@@ -26,7 +26,7 @@ class Solution {
     public int find(int node) {
         if (parents[node] == node)
             return node;
-        return find(parents[node]);
+        return parents[node] = find(parents[node]);
     }
     public void union(int node1, int node2) {
         int p1 = find(node1);
