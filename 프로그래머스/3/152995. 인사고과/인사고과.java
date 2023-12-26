@@ -1,32 +1,38 @@
 import java.util.*;
 class Solution {
     public int solution(int[][] scores) {
-        //완호의 등수를 구해야한다. 완호는 scores[0]
-        for (int i = 0; i<scores.length; i++) {
-            if (scores[0][0] < scores[i][0] && scores[0][1] < scores[i][1]) {
-                return -1;
+        int[] wanho = scores[0];
+        Arrays.sort(scores, new Comparator<>(){
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                //근무 태도 점수 내림차순, 점수 같으면 동료 평가 점수 오름차순
+                if (o1[0] == o2[0]) {
+                    return o1[1] - o2[1];
+                }
+                return o2[0] - o1[0];
             }
-        }
+        });
         
         int answer = 1;
-        for (int i = 1; i<scores.length; i++) {
-            if (scores[0][0] + scores[0][1] < scores[i][0] + scores[i][1]) {
-                boolean canIncentive = true;
-                for (int j = 1; j<scores.length; j++) {
-                    if (scores[i][0] <scores[j][0] && scores[i][1] < scores[j][1]) {
-                        canIncentive = false;
-                        break;
-                    }
+        int max = 0;
+        int wanhoSum = wanho[0] + wanho[1];
+        for (int i = 0; i<scores.length; i++) {
+            //인센티브 탈락 대상자
+            if (scores[i][1] < max) {
+                //탈락 대상자가 완호일 경우
+                if (scores[i].equals(wanho)) {
+                    return -1;
                 }
-                if (canIncentive) answer++;
+                continue;
+            } 
+            
+            //인센티브 수령 대상자
+            max = Math.max(max, scores[i][1]);
+            if (wanhoSum < scores[i][0] + scores[i][1]) {
+                answer++;
             }
+            
         }
-        
         return answer;
-    }
-    
-    private static class Score {
-        int idx;
-        int score;
     }
 }
