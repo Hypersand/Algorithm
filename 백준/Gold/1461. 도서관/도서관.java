@@ -1,7 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -9,45 +12,60 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        List<Integer> negative = new ArrayList<>();
-        List<Integer> positive = new ArrayList<>();
         st = new StringTokenizer(br.readLine());
-        for (int i=0; i<N; i++) {
-            int book = Integer.parseInt(st.nextToken());
-            if (book > 0) positive.add(book);
-            else negative.add(book);
-        }
-        Collections.sort(negative);
-        Collections.sort(positive, Collections.reverseOrder());
+        List<Integer> plusList = new ArrayList<>();
+        List<Integer> minusList = new ArrayList<>();
 
-        List<Integer> distance = new ArrayList<>();
-        while(!negative.isEmpty()) {
-            int temp = negative.remove(0);
-            for (int i=1; i<M; i++) {
-                if (!negative.isEmpty()) {
-                    negative.remove(0);
+        for (int i = 0; i < N; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            if (num > 0) {
+                plusList.add(num);
+            } else {
+                minusList.add(num);
+            }
+        }
+
+        Collections.sort(plusList, Collections.reverseOrder());
+        Collections.sort(minusList);
+        //M : 한번에 들 수 있는 책의 개수
+        //M이 리스트에 있는 갯수보다 클 경우도 따로 생각해야될듯
+        int answer = 0;
+        int plusIdx = 0;
+        int minusIdx = 0;
+        if (plusList.size() > 0 && minusList.size() > 0) {
+            if (plusList.get(0) > minusList.get(0) * -1) {
+                answer += plusList.get(0);
+                plusIdx += M;
+            } else if (plusList.get(0) < Math.abs(minusList.get(0))) {
+                answer += Math.abs(minusList.get(0));
+                minusIdx += M;
+            } else {
+                if (plusList.size() > minusList.size()) {
+                    answer += plusList.get(0);
+                    plusIdx += M;
+                } else {
+                    answer += Math.abs(minusList.get(0));
+                    minusIdx += M;
                 }
             }
-            distance.add(-temp);
-        }
-
-        while(!positive.isEmpty()) {
-            int temp = positive.remove(0);
-            for (int i=1; i<M; i++) {
-                if (!positive.isEmpty()) {
-                    positive.remove(0);
-                }
+        } else {
+            if (plusList.size() == 0) {
+                answer += Math.abs(minusList.get(0));
+                minusIdx += M;
+            } else {
+                answer += plusList.get(0);
+                plusIdx += M;
             }
-            distance.add(temp);
         }
 
-        int result = 0;
-        Collections.sort(distance);
-        for (int i=0; i<distance.size() - 1; i++) {
-            result += (distance.get(i)*2);
+        for (int i = plusIdx; i < plusList.size(); i += M) {
+            answer += plusList.get(i) * 2;
         }
-        result += distance.get(distance.size()- 1);
 
-        System.out.println(result);
+        for (int i = minusIdx; i < minusList.size(); i += M) {
+            answer += Math.abs(minusList.get(i)) * 2;
+        }
+
+        System.out.println(answer);
     }
 }
