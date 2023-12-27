@@ -7,33 +7,31 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        comb("");
+        backTracking(0, "");
     }
 
-    private static void comb(String str) {
-        if (str.length() == N) {
-            System.out.println(str);
+    private static void backTracking(int idx, String num) {
+        if (idx == N) {
+            System.out.println(num);
             System.exit(0);
         }
 
         for (int i = 1; i <= 3; i++) {
-            if (isGoodSequence(str + i)) {
-                comb(str + i);
+            if (validate(num, i)) {
+                backTracking(idx + 1, num + i);
             }
         }
+
     }
 
-    private static boolean isGoodSequence(String str) {
-        if (str.length() >= 2) {
-            if (str.charAt(str.length() - 2) == str.charAt(str.length() - 1)) {
+    private static boolean validate(String num, int i) {
+        String newNum = num + i;
+        for (int j = 1; j <= newNum.length() / 2; j++) {
+            String front = newNum.substring(newNum.length() - (2 * j), newNum.length() - j);
+            String end = newNum.substring(newNum.length() - j);
+            if (front.equals(end)) {
                 return false;
             }
-        }
-
-        for (int i = 1; i <= str.length() / 2; i++) {
-            String front = str.substring(str.length() - 2 * i, str.length() - i);
-            String back = str.substring(str.length() - i);
-            if (front.equals(back)) return false;
         }
         return true;
     }
