@@ -42,24 +42,13 @@ class Solution {
                     else {
                         int last = list.get(m - 1);
                         int lastSecond = list.get(m - 2);
-                        //뒤의 2명의 수가 다르면
-                        if (lastSecond < last) {
-                            max = timeParsing(last, -1);
-                            pq.add(last);
-                        } 
-                        //뒤의 2명이 수가 같으면?
-                        else {
-                            max = timeParsing(last, -1);
-                            pq.add(last);
-                        }
+                        max = timeParsing(last, -1);
+                        pq.add(last);
                     }
                 }
             }
-            
-            
             shuttle = timeParsing(shuttle, t);
         }
-        System.out.println(max);
         if (max <= 0) return "00:00";
         String hour = "";
         String minute = "";
@@ -72,20 +61,17 @@ class Solution {
         
     }
     
-    //shuttle 시간에 t를 추가했을때의 값 파싱
     private static int timeParsing(int shuttle, int t) {
-        //예시 : 924 + 50 = 1014 
-        //예시 : 900 - 60 = 800
-        int minute = shuttle % 100;  //24
-        int hour = shuttle / 100; // 9
+        int minute = shuttle % 100;  
+        int hour = shuttle / 100; 
         if (t > 0) {
-            minute += t; //24 + 50  = 74;
+            minute += t; 
             hour += minute / 60;
         } else {
             if (t == -60) {
                 return (hour - 1) * 100 + minute;
             }
-            minute += t;// 20 - 40 = -20
+            minute += t;
             if (minute < 0) {
                 minute += 60;
                 hour -= 1;
