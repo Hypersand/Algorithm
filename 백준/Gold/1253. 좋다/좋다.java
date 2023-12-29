@@ -19,14 +19,19 @@ public class Main {
             int start = 0;
             int end = N - 1;
             while (start < end) {
-                if (start == i) start++;
-                if (end == i) end--;
-                if (start >= end) break;
                 if (arr[start] + arr[end] < target) {
                     start++;
                 } else if (arr[start] + arr[end] > target) {
                     end--;
                 } else {
+                    if (start == i) {
+                        start++;
+                        continue;
+                    }
+                    if (end == i) {
+                        end--;
+                        continue;
+                    }
                     cnt++;
                     break;
                 }
