@@ -14,32 +14,27 @@ public class Main {
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
+        Set<Integer> set = new HashSet<>();
         int start = 0;
         int end = 0;
-        int max = 0;
-        long total = 0;
-        Set<Integer> set = new HashSet<>();
+        long cnt = 0;
         while (start < N) {
             if (end == N) {
-                total += end - start;
+                cnt += end - start;
                 start++;
                 continue;
             }
 
             if (!set.contains(arr[end])) {
-                set.add(arr[end++]);
-                max = Math.max(max, end - start);
+                set.add(arr[end]);
+                end++;
                 continue;
             }
-
-            //end 위치의 숫자가 이미 존재하는 숫자라면?
-            while (set.size() != 0 && set.contains(arr[end])) {
-                total += end - start;
-                set.remove(arr[start++]);
-            }
+            //end의 숫자가 이미 존재하는 숫자라면?
+            cnt += end - start;
+            set.remove(arr[start]);
+            start++;
         }
-
-
-        System.out.println(total);
+        System.out.println(cnt);
     }
 }
