@@ -1,43 +1,43 @@
 import java.util.*;
 class Solution {
     private static int N;
-    private static int[] dp;
-    private static int answer = 0;
+    private static int[] visited; //방문한 열, 행 체크
+    private static int cnt = 0;
     public int solution(int n) {
+        visited = new int[n];
+        for (int i = 0; i<n; i++) {
+            visited[i] = -1;
+        }
         N = n;
-        dp = new int[N];
-        comb(0);
-        return answer;
+        game(0);
+        return cnt;
     }
-    private static void comb(int row) {
+    
+    private static void game(int row) {
         if (row == N) {
-            answer++;
+            cnt++;
             return;
         }
         
-        //열 이동
         for (int i = 0; i<N; i++) {
-            dp[row] = i;
-            boolean isTrue = true;
-            for (int j = 0; j<row; j++) {
-                //같은 열에 배치된게 있는지 확인
-                if (dp[j] == dp[row]) {
-                    isTrue = false;
-                    break;
-                }
-                //같은 대각선상에 배치된게 있는지 확인
-                //행증가량 == 열증가량 -> 같은 대각선
-                if (Math.abs(row - j) == Math.abs(dp[row]-dp[j])) {
-                    isTrue = false;
-                    break;
-                }
+            visited[row] = i;
+            if (validate(row, i)) {
+                game(row + 1);
             }
-            
-            if (isTrue) {
-                comb(row + 1);
-            }   
         }
         
     }
-
-}
+    
+    private static boolean validate(int row, int col) {
+        for (int i = 0; i<row; i++) {
+            //이미 같은 열에 놓았으면 false 반환
+            if (visited[i] == visited[row]) return false;
+            //이미 같은 대각선에 놓았으면 false 반환
+            if (Math.abs((i - row)) == Math.abs(visited[i] - col)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+ }
