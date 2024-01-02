@@ -1,38 +1,32 @@
 import java.util.*;
 class Solution {
     public int solution(int[][] scores) {
-        int[] wanho = scores[0];
+        int[] myGrade = scores[0];
+        int mySum = scores[0][0] + scores[0][1];
         Arrays.sort(scores, new Comparator<>(){
             @Override
-            public int compare(int[] o1, int[] o2) {
-                //근무 태도 점수 내림차순, 점수 같으면 동료 평가 점수 오름차순
-                if (o1[0] == o2[0]) {
-                    return o1[1] - o2[1];
+            public int compare(int[] score1, int[] score2) {
+                if (score2[0] == score1[0]) {
+                    return score1[1] - score2[1];
                 }
-                return o2[0] - o1[0];
+                return score2[0] - score1[0];
             }
         });
-        
-        int answer = 1;
+           
         int max = 0;
-        int wanhoSum = wanho[0] + wanho[1];
+        int rank = 1;
         for (int i = 0; i<scores.length; i++) {
-            //인센티브 탈락 대상자
-            if (scores[i][1] < max) {
-                //탈락 대상자가 완호일 경우
-                if (scores[i].equals(wanho)) {
-                    return -1;
-                }
+            if (max > scores[i][1]) {
+                if (scores[i] == myGrade) return -1;
                 continue;
-            } 
-            
-            //인센티브 수령 대상자
-            max = Math.max(max, scores[i][1]);
-            if (wanhoSum < scores[i][0] + scores[i][1]) {
-                answer++;
             }
             
+            if (scores[i][0] + scores[i][1] > mySum) {
+                rank++;
+            }
+            max = scores[i][1];
+            
         }
-        return answer;
+        return rank;
     }
 }
