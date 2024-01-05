@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,16 +42,12 @@ public class Main {
     private static int dijkstra(int start, int end) {
         dp = new int[N + 1];
         Arrays.fill(dp, INF);
-        PriorityQueue<Node> pq = new PriorityQueue<>(new Comparator<Node>() {
-            @Override
-            public int compare(Node n1, Node n2) {
-                return n1.cost - n2.cost;
-            }
-        });
+        PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.add(new Node(start, 0));
         dp[start] = 0;
         while (!pq.isEmpty()) {
             Node node = pq.poll();
+            if (dp[node.num] < node.cost) continue;
             for (Node next : lists[node.num]) {
                 if (dp[next.num] > dp[node.num] + next.cost) {
                     dp[next.num] = dp[node.num] + next.cost;
@@ -61,13 +58,18 @@ public class Main {
         return dp[end];
     }
 
-    private static class Node {
+    private static class Node implements Comparable<Node> {
         private int num;
         private int cost;
 
         public Node(int num, int cost) {
             this.num = num;
             this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return this.cost - o.cost;
         }
     }
 }
