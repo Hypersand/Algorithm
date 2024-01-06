@@ -6,56 +6,61 @@ import java.util.*;
 public class Main {
     private static int[] parents;
     private static int[] cnts;
-    private static Map<String, Integer> map;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < T; i++) {
             int F = Integer.parseInt(br.readLine());
-            parents = new int[F * 2];
-            cnts = new int[F * 2];
-            map = new HashMap<>();
-            int idx = 0;
+            Map<String, Integer> map = new HashMap<>();
+            parents = new int[2 * F + 1];
+            cnts = new int[2 * F + 1];
+            int idx = 1;
             for (int j = 0; j < F; j++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
-                String A = st.nextToken();
-                String B = st.nextToken();
-                if (!map.containsKey(A)) {
+                String friend1 = st.nextToken();
+                String friend2 = st.nextToken();
+                if (!map.containsKey(friend1)) {
                     parents[idx] = idx;
                     cnts[idx] = 1;
-                    map.put(A, idx++);
+                    map.put(friend1, idx++);
                 }
-
-                if (!map.containsKey(B)) {
+                if (!map.containsKey(friend2)) {
                     parents[idx] = idx;
                     cnts[idx] = 1;
-                    map.put(B, idx++);
+                    map.put(friend2, idx++);
                 }
 
-                sb.append(union(map.get(A), map.get(B))).append("\n");
+                sb.append(union(map.get(friend1), map.get(friend2))).append("\n");
             }
         }
-
         System.out.println(sb);
     }
 
-    private static int union(int A, int B) {
-        int pA = find(A);
-        int pB = find(B);
+    private static int union(int a, int b) {
+        int pA = find(a);
+        int pB = find(b);
 
-        if (pA != pB) {
-            cnts[pA] += cnts[pB];
-            parents[pB] = pA;
+        if (pA == pB) {
+            return cnts[pA];
         }
+
+        if (pA > pB) {
+            parents[pA] = pB;
+            cnts[pB] += cnts[pA];
+            return cnts[pB];
+        }
+
+        parents[pB] = pA;
+        cnts[pA] += cnts[pB];
         return cnts[pA];
     }
 
-    private static int find(int A) {
-        if (parents[A] == A) {
-            return A;
+    private static int find(int x) {
+        if (parents[x] == x) {
+            return x;
         }
-        return parents[A] = find(parents[A]);
+        return parents[x] = find(parents[x]);
     }
 
 }
