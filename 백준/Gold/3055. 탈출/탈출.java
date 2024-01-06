@@ -53,7 +53,6 @@ public class Main {
     }
 
     private static void move() {
-        boolean[][] isWaterVisited = new boolean[R][C];
         boolean[][] isAnimalVisited = new boolean[R][C];
 
         //Node Class type : 0 -> 물,  type : 1 -> 고슴도치
