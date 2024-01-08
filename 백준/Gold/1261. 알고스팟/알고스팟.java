@@ -56,14 +56,6 @@ public class Main {
                 }
 
                 //빈방이라면?
-                //처음 방문하는 빈방
-                if (destroyArr[nx][ny] == INF) {
-                    destroyArr[nx][ny] = destroyArr[node.x][node.y];
-                    queue.add(new Node(nx, ny));
-                    continue;
-                }
-
-                //이미 방문한 적 있는 빈방
                 if (destroyArr[nx][ny] > destroyArr[node.x][node.y]) {
                     destroyArr[nx][ny] = destroyArr[node.x][node.y];
                     queue.add(new Node(nx, ny));
