@@ -7,35 +7,36 @@ public class Main {
     private static int N;
     private static int[] populations;
     private static List<Integer>[] lists;
-    private static int[] group; //1번그룹과 2번그룹으로 구분
-    private static int answer = Integer.MAX_VALUE;
+    private static boolean[] isGroupA;
     private static boolean[] visited;
+    private static int answer = 1000000000;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        lists = new ArrayList[N + 1];
         populations = new int[N + 1];
-        group = new int[N + 1];
+        lists = new ArrayList[N + 1];
+        isGroupA = new boolean[N + 1];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 1; i <= N; i++) {
             populations[i] = Integer.parseInt(st.nextToken());
             lists[i] = new ArrayList<>();
         }
+
         for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             int num = Integer.parseInt(st.nextToken());
-            for (int j = 0; j < num; j++) {
-                int node = Integer.parseInt(st.nextToken());
-                lists[i].add(node);
-                lists[node].add(i);
+            for (int j = 1; j <= num; j++) {
+                lists[i].add(Integer.parseInt(st.nextToken()));
             }
         }
+
         comb(1);
-        if (answer == Integer.MAX_VALUE) {
+
+        if (answer == 1000000000) {
             System.out.println(-1);
-            return;
+        } else {
+            System.out.println(answer);
         }
-        System.out.println(answer);
     }
 
     private static void comb(int idx) {
@@ -44,41 +45,43 @@ public class Main {
             List<Integer> list = new ArrayList<>();
             for (int i = 1; i <= N; i++) {
                 if (!visited[i]) {
-                    list.add(bfs(i));
+                    list.add(search(i));
                 }
             }
 
             if (list.size() == 2) {
-                answer = Math.min(answer, Math.abs(list.get(0) - list.get(1)));
+                answer = Math.min(Math.abs(list.get(0) - list.get(1)), answer);
             }
             return;
         }
 
         for (int i = 1; i <= 2; i++) {
-            group[idx] = i;
+            if (i == 1) {
+                isGroupA[idx] = true;
+            } else {
+                isGroupA[idx] = false;
+            }
             comb(idx + 1);
         }
+
     }
 
-    private static int bfs(int num) {
+    private static int search(int node) {
         Queue<Integer> queue = new LinkedList<>();
-        queue.add(num);
-        visited[num] = true;
-        int groupNum = group[num];
-        int population = populations[num];
+        boolean group = isGroupA[node];
+        visited[node] = true;
+        queue.add(node);
+        int population = populations[node];
         while (!queue.isEmpty()) {
-            int node = queue.poll();
-            for (int next : lists[node]) {
-                if (!visited[next] && group[next] == groupNum) {
-                    queue.add(next);
+            int cur = queue.poll();
+            for (int next : lists[cur]) {
+                if (isGroupA[next] == group && !visited[next]) {
                     visited[next] = true;
                     population += populations[next];
+                    queue.add(next);
                 }
             }
         }
         return population;
     }
-
-
-
 }
