@@ -20,24 +20,18 @@ public class Main {
             max += costs[i];
         }
 
-        int[][] dp = new int[N + 1][max + 1];
+        int[] dp = new int[max + 1];
 
         for (int i = 1; i <= N; i++) {
-            for (int j = 0; j <= max; j++) {
-                if (costs[i] > j) {
-                    dp[i][j] = dp[i - 1][j];
-                } else {
-                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - costs[i]] + mems[i]);
-                }
+            for (int j = max; j - costs[i] >= 0; j--) {
+                dp[j] = Math.max(dp[j], dp[j - costs[i]] + mems[i]);
             }
         }
 
         int answer = Integer.MAX_VALUE;
-        for (int i = 1; i <= N; i++) {
-            for (int j = 0; j <= max; j++) {
-                if (dp[i][j] >= M) {
-                    answer = Math.min(answer, j);
-                }
+        for (int j = 0; j <= max; j++) {
+            if (dp[j] >= M) {
+                answer = Math.min(answer, j);
             }
         }
         System.out.println(answer);
