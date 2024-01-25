@@ -1,44 +1,38 @@
 import java.util.*;
 class Solution {
     public int[] solution(int n, long k) {
-        boolean[] isUsed = new boolean[n+1];
+        boolean[] visited = new boolean[n+1];
+        int N = n;
         int[] answer = new int[n];
-        int ansIdx = 0;
+        int answerIdx = 0;
         while (n > 1) {
-            long cnt = 1;
-            for (int i = 1; i<=n-1; i++) {
-                cnt *= i;
+            long tmp = 1;
+            for (int i = 2; i<n; i++) {
+                tmp *= i;
             }
-            
-            long numIdx = 1;
-            if (k % cnt > 0) {
-                numIdx = k / cnt + 1;
-            } else {
-                numIdx = k / cnt;
-            }
-            
-            int idx = 1;
-            for (int i = 1; i< isUsed.length; i++) {
-                if (!isUsed[i]) {
-                    if (idx == numIdx) {
-                        isUsed[i] = true;
-                        answer[ansIdx++] = i;
-                        //k랑 n도 줄어야됨
-                        k -= cnt * (numIdx - 1);
-                        n--;
+            long idx = (k - 1) / tmp; //idx 번째 수
+            int cnt = -1;
+            //현재 사용하지 않은 수 중 idx 번째 수를 찾아야 함.
+            for (int i = 1; i<=N; i++) {
+                if (!visited[i]) {
+                    cnt++;
+                    if (cnt == idx) {
+                        visited[i] = true;
+                        answer[answerIdx++] = i;
                         break;
                     }
-                    idx++;
                 }
             }
+            
+            k -= idx * tmp;
+            n--;
         }
         
-        for (int i = 1; i< isUsed.length; i++) {
-            if (!isUsed[i]) {
-                answer[ansIdx++] = i;
+        for (int i = 1; i<=N; i++) {
+            if (!visited[i]) {
+                answer[answerIdx++] = i;
             }
         }
-        
         return answer;
     }
 }
