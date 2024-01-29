@@ -13,19 +13,16 @@ class Solution {
         });
         
         List<Integer> sumList = new ArrayList<>();
+        int answer = 0;
         
         for (int i = row_begin - 1; i < row_end; i++) {
             int sum = 0;
             for (int j = 0; j<data[i].length; j++) {
                 sum += data[i][j] % (i+1);
             }
-            sumList.add(sum);
+            answer = sum ^ answer;
         }
         
-        int answer = sumList.get(0);
-        for (int i = 1; i<sumList.size(); i++) {
-            answer = answer ^ sumList.get(i);
-        }
         
         return answer;
     }
