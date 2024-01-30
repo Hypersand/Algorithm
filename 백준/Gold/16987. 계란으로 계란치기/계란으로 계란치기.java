@@ -7,14 +7,12 @@ public class Main {
     private static int N;
     private static List<Egg> list = new ArrayList<>();
     private static int[] remains;
-    private static boolean[] destroyed;
     private static int answer = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         remains = new int[N];
-        destroyed = new boolean[N];
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             list.add(new Egg(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
@@ -31,37 +29,22 @@ public class Main {
             return;
         }
 
-        if (destroyed[idx]) {
+        if (remains[idx] <= 0) {
             dfs(idx + 1, destroyCnt);
             return;
         }
 
         for (int i = 0; i < N; i++) {
             if (i == idx) continue;
-            if (destroyed[i]) continue;
-            Egg egg1 = list.get(idx);
-            Egg egg2 = list.get(i);
-            remains[idx] -= egg2.w;
-            remains[i] -= egg1.w;
-            if (remains[idx] <= 0 && remains[i] <= 0) {
-                destroyed[idx] = true;
-                destroyed[i] = true;
-                dfs(idx + 1, destroyCnt + 2);
-                destroyed[idx] = false;
-                destroyed[i] = false;
-            } else if (remains[idx] <= 0) {
-                destroyed[idx] = true;
-                dfs(idx + 1, destroyCnt + 1);
-                destroyed[idx] = false;
-            } else if (remains[i] <= 0) {
-                destroyed[i] = true;
-                dfs(idx + 1, destroyCnt + 1);
-                destroyed[i] = false;
-            } else {
-                dfs(idx + 1, destroyCnt);
-            }
-            remains[idx] += egg2.w;
-            remains[i] += egg1.w;
+            if (remains[i] <= 0) continue;
+            remains[idx] -= list.get(i).w;
+            remains[i] -= list.get(idx).w;
+            int cnt = 0;
+            if (remains[idx] <= 0) cnt++;
+            if (remains[i] <= 0) cnt++;
+            dfs(idx + 1, destroyCnt + cnt);
+            remains[idx] += list.get(i).w;
+            remains[i] += list.get(idx).w;
         }
 
         answer = Math.max(answer, destroyCnt);
