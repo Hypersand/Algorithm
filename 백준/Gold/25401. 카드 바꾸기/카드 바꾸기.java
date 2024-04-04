@@ -23,28 +23,25 @@ public class Main {
         int minSameCnt = N - maxSameCnt;
 
         // 1. 일정하게 변하는 상황 만들기
-        int minChangeCnt = Integer.MAX_VALUE;
+        int minChangeCnt = N - 2;
         for (int i = 0; i < N - 1; i++) {
-            int[] arr2 = arr.clone();
-            int dist = arr[i + 1] - arr[i];
-            int cnt = 0;
-            boolean flag = true;
-            for (int j = i - 1; j >= 0; j--) {
-                if (arr2[j + 1] - arr2[j] != dist) {
-                    arr2[j] = arr2[j + 1] - dist;
-                    cnt++;
-                }
-            }
+            for (int j = i + 1; j < N; j++) {
+                int dist = (arr[j] - arr[i]) / (j - i);
+                double dist_double = (arr[j] - arr[i]) / (double)(j - i);
+                if (dist - dist_double != 0) continue;
 
-            for (int j = i + 2; j < N; j++) {
-                if (arr2[j] - arr2[j - 1] != dist) {
-                    arr2[j] = arr2[j - 1] + dist;
-                    cnt++;
+                int cur = arr[i] - (dist * i);
+                int cnt = 0;
+                for (int k = 0; k < N; k++) {
+                    if (arr[k] != cur) {
+                        cnt++;
+                    }
+                    cur += dist;
                 }
+                minChangeCnt = Math.min(minChangeCnt, cnt);
             }
-
-            minChangeCnt = Math.min(minChangeCnt, cnt);
         }
+
         System.out.println(Math.min(minSameCnt, minChangeCnt));
     }
 }
