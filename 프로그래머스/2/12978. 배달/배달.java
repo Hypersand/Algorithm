@@ -31,7 +31,7 @@ class Solution {
     }
     
     private static void dijkstra() {
-        Queue<Integer> queue = new LinkedList<>();
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
         queue.add(1);
         dists[1] = 0;
         while (!queue.isEmpty()) {
