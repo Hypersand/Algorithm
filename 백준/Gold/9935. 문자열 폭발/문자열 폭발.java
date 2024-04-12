@@ -6,42 +6,45 @@ import java.util.Stack;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String str = br.readLine();
-        String bomb = br.readLine();
-        Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < str.length(); i++) {
-            stack.push(str.charAt(i));
+        char[] strArr = br.readLine().toCharArray();
+        String bombStr = br.readLine();
 
-            if (stack.size() >= bomb.length()) {
-                boolean isBomb = true;
-                for (int j = 0; j < bomb.length(); j++) {
-                    if (stack.get(stack.size() - bomb.length() + j) != bomb.charAt(j)) {
-                        isBomb = false;
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < strArr.length; i++) {
+            stack.push(strArr[i]);
+
+            if (stack.size() < bombStr.length()) continue;
+
+            while (stack.size() >= bombStr.length()) {
+                boolean flag = true;
+                int idx = 0;
+                for (int j = stack.size() - bombStr.length(); j < stack.size(); j++) {
+                    if (stack.get(j) != bombStr.charAt(idx)) {
+                        flag = false;
                         break;
                     }
+                    idx++;
                 }
-
-                if (isBomb) {
-                    for (int j = 0; j < bomb.length(); j++) {
+                if (flag) {
+                    for (int j = 0; j < bombStr.length(); j++) {
                         stack.pop();
                     }
+                    continue;
                 }
+                break;
             }
         }
 
-        StringBuilder sb = new StringBuilder();
-        Stack<Character> newStack = new Stack<>();
-        if (stack.size() == 0) {
+        StringBuilder answerSb = new StringBuilder();
+        for (int i = 0; i < stack.size(); i++) {
+            answerSb.append(stack.get(i));
+        }
+
+        if (answerSb.toString().length() == 0) {
             System.out.println("FRULA");
-        }
-        while (!stack.isEmpty()) {
-            newStack.push(stack.pop());
+            return;
         }
 
-        while (!newStack.isEmpty()) {
-            sb.append(newStack.pop());
-        }
-
-        System.out.println(sb);
+        System.out.println(answerSb);
     }
 }
