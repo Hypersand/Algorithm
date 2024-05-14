@@ -23,15 +23,9 @@ public class Main {
             String line = br.readLine();
             for (int j = 0; j < M; j++) {
                 map[i][j] = line.charAt(j);
-            }
-        }
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (map[i][j] == 79) {
-                    goal = new Point(i, j);
-                    break;
-                }
+                if (map[i][j] == 79) goal = new Point(i, j);
+                if (map[i][j] == 'R') red = new Point(i, j);
+                if (map[i][j] == 'B') blue = new Point(i, j);
             }
         }
 
@@ -46,6 +40,12 @@ public class Main {
 
         for (int i = 0; i < 4; i++) {
             FourMarble fourMarble = validateDirection(i);
+            // 빨간 구슬, 파란 구슬 모두 움직임이 없다면?
+            if (fourMarble.originRed.x == fourMarble.newRed.x && fourMarble.originRed.y == fourMarble.newRed.y) {
+                if (fourMarble.originBlue.x == fourMarble.newBlue.x && fourMarble.originBlue.y == fourMarble.newBlue.y) {
+                    continue;
+                }
+            }
             selectDirection(cnt + 1);
             map[fourMarble.newRed.x][fourMarble.newRed.y] = '.';
             map[fourMarble.newBlue.x][fourMarble.newBlue.y] = '.';
@@ -57,7 +57,6 @@ public class Main {
     private static FourMarble validateDirection(int dir) {
         Point redPos = new Point(0, 0);
         Point bluePos = new Point(0, 0);
-
         // 빨간 구슬, 파란 구슬 위치 조회
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
