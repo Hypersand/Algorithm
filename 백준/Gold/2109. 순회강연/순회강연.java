@@ -9,40 +9,50 @@ import java.util.StringTokenizer;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
         List<Node> list = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
+
+        for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int pay = Integer.parseInt(st.nextToken());
-            int day = Integer.parseInt(st.nextToken());
-            list.add(new Node(pay, day));
+            int p = Integer.parseInt(st.nextToken());
+            int d = Integer.parseInt(st.nextToken());
+            list.add(new Node(d, p));
         }
 
-        Collections.sort(list, (n1, n2) -> (n1.pay == n2.pay) ? n1.day - n2.day : n2.pay - n1.pay);
+        Collections.sort(list);
+
         boolean[] visited = new boolean[10001];
-        int answer = 0;
+        int sum = 0;
+
         for (int i = 0; i < list.size(); i++) {
-            int day = list.get(i).day;
-            int pay = list.get(i).pay;
-            for (int j = day; j >= 1; j--) {
+            Node node = list.get(i);
+            for (int j = node.day; j > 0; j--) {
                 if (!visited[j]) {
                     visited[j] = true;
-                    answer += pay;
+                    sum += node.pay;
                     break;
                 }
             }
         }
 
-        System.out.println(answer);
+        System.out.println(sum);
     }
 
-    private static class Node {
-        private final int pay;
-        private final int day;
+    private static class Node implements Comparable<Node> {
+        private int day;
+        private int pay;
 
-        public Node(int pay, int day) {
-            this.pay = pay;
+        public Node(int day, int pay) {
             this.day = day;
+            this.pay = pay;
+        }
+
+        @Override
+        public int compareTo(Node n) {
+            if (n.pay == this.pay) {
+                return n.day - this.day;
+            }
+            return n.pay - this.pay;
         }
     }
 }
