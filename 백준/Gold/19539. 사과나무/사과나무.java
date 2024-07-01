@@ -8,19 +8,25 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         int[] arr = new int[N];
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int twoCount = 0;
-        int oneCount = 0;
         int sum = 0;
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
-            twoCount += arr[i] / 2;
-            oneCount += arr[i] % 2;
             sum += arr[i];
         }
 
-        if (oneCount > twoCount || sum / 3 > twoCount || sum % 3 != 0) {
+        if (sum % 3 != 0) {
+            System.out.println("NO");
+            return;
+        }
+
+        sum /= 3; // 1과 2의 쌍의 최대 개수
+        int twoCnt = 0;
+        for (int i = 0; i < N; i++) {
+            twoCnt += arr[i] / 2;
+        }
+
+        if (twoCnt < sum) {
             System.out.println("NO");
             return;
         }
