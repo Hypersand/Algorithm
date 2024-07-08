@@ -1,0 +1,10 @@
+-- 진료과가 흉부외가이거나 일반외과
+-- 고용일자 내림차순, 이름 오름차순
+SELECT 
+  DR_NAME,
+  DR_ID,
+  MCDP_CD,
+  TO_CHAR(HIRE_YMD, 'YYYY-MM-DD') AS HIRE_YMD
+FROM DOCTOR
+WHERE MCDP_CD = 'CS' OR MCDP_CD = 'GS'
+ORDER BY HIRE_YMD DESC, DR_NAME;
