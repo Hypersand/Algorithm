@@ -11,48 +11,50 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         List<Node> list = new ArrayList<>();
-
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int p = Integer.parseInt(st.nextToken());
             int d = Integer.parseInt(st.nextToken());
-            list.add(new Node(d, p));
+            list.add(new Node(p, d));
         }
 
         Collections.sort(list);
-
-        boolean[] visited = new boolean[10001];
-        int sum = 0;
-
-        for (int i = 0; i < list.size(); i++) {
+        int answer = 0;
+        int[] arr = new int[10001];
+        for (int i = 0; i < n; i++) {
             Node node = list.get(i);
-            for (int j = node.day; j > 0; j--) {
-                if (!visited[j]) {
-                    visited[j] = true;
-                    sum += node.pay;
-                    break;
+            if (arr[node.day] < node.pay) {
+                arr[node.day] = node.pay;
+                answer += node.pay;
+            } else {
+                for (int j = node.day - 1; j > 0; j--) {
+                    if (arr[j] < node.pay) {
+                        arr[j] = node.pay;
+                        answer += node.pay;
+                        break;
+                    }
                 }
             }
         }
 
-        System.out.println(sum);
+        System.out.println(answer);
     }
 
     private static class Node implements Comparable<Node> {
-        private int day;
         private int pay;
+        private int day;
 
-        public Node(int day, int pay) {
-            this.day = day;
+        private Node(int pay, int day) {
             this.pay = pay;
+            this.day = day;
         }
 
         @Override
-        public int compareTo(Node n) {
-            if (n.pay == this.pay) {
-                return n.day - this.day;
+        public int compareTo(Node node) {
+            if (node.pay == this.pay) {
+                return node.day - this.day;
             }
-            return n.pay - this.pay;
+            return node.pay - this.pay;
         }
     }
 }
