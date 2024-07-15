@@ -4,12 +4,13 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
+    private static final int INF = 1000000;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        int INF = 100000000;
         int[][] arr = new int[N + 1][4];
         int[][] dp = new int[N + 1][4];
+
         for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= 3; j++) {
@@ -21,9 +22,9 @@ public class Main {
         for (int start = 1; start <= 3; start++) {
             for (int i = 1; i <= 3; i++) {
                 if (i == start) {
-                    dp[1][i] = arr[1][i];
+                    dp[1][start] = arr[1][start]; // 첫번째 칸을 start번째 색으로 칠하고 시작
                 } else {
-                    dp[1][i] = INF;
+                    dp[1][i] = INF; // 색칠하지 않은 칸은 INF로 채우기
                 }
             }
 
@@ -33,16 +34,9 @@ public class Main {
                 dp[i][3] = Math.min(dp[i - 1][1], dp[i - 1][2]) + arr[i][3];
             }
 
-            if (start == 1) {
-                dp[N][1] = INF;
-            } else if (start == 2) {
-                dp[N][2] = INF;
-            } else {
-                dp[N][3] = INF;
-            }
-
             for (int i = 1; i <= 3; i++) {
-                answer = Math.min(dp[N][i], answer);
+                if (i == start) continue;
+                answer = Math.min(answer, dp[N][i]);
             }
         }
 
