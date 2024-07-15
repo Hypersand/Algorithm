@@ -10,43 +10,39 @@ public class Main {
         int T = Integer.parseInt(st.nextToken());
         int W = Integer.parseInt(st.nextToken());
         int[] arr = new int[T + 1];
-        int[][][] dp = new int[T + 1][3][W + 1];
-
         for (int i = 1; i <= T; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
 
-        dp[1][1][0] = arr[1] == 1 ? 1 : 0;
-        int max = dp[1][1][0];
-        if (W > 0) {
-            dp[1][2][1] = arr[1] == 2 ? 1 : 0;
-            max = Math.max(max, dp[1][2][1]);
+        int[][][] dp = new int[T + 1][3][W + 1];
+        if (arr[1] == 1) {
+            dp[1][1][0] = 1;
+        } else {
+            dp[1][2][1] = 1;
         }
 
-        for (int i = 2; i <= T; i++) {
-            for (int j = 1; j <= 2; j++) {
-                for (int k = 0; k <= W; k++) {
-                    if (i - k <= 0) break;
-                    dp[i][j][k] = Math.max(dp[i][j][k], dp[i - 1][j][k]);
-                    if (j == 1) {
-                        if (k > 0) {
-                            dp[i][j][k] = Math.max(dp[i][j][k], dp[i - 1][2][k - 1]);
+        int answer = 1;
+        for (int t = 2; t <= T; t++) {
+            for (int i = 1; i <= 2; i++) {
+                for (int j = 0; j <= W; j++) {
+                    if (j == 0) {
+                        if (i == arr[t]) {
+                            dp[t][i][j] = dp[t - 1][i][j] + 1;
+                        } else {
+                            dp[t][i][j] = dp[t - 1][i][j];
                         }
                     } else {
-                        if (k > 0) {
-                            dp[i][j][k] = Math.max(dp[i][j][k], dp[i - 1][1][k - 1]);
+                        if (i == arr[t]) {
+                            dp[t][i][j] = Math.max(dp[t - 1][i][j], dp[t - 1][2 / i][j - 1]) + 1;
+                        } else {
+                            dp[t][i][j] = Math.max(dp[t - 1][i][j], dp[t - 1][2 / i][j - 1]);
                         }
                     }
+                    answer = Math.max(answer, dp[t][i][j]);
 
-                    if (j == arr[i]) {
-                        dp[i][j][k] += 1;
-                    }
-
-                    max = Math.max(dp[i][j][k], max);
                 }
             }
         }
-
-        System.out.println(max);
+        System.out.println(answer);
     }
 }
