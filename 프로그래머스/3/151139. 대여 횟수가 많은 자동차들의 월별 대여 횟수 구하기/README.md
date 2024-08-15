@@ -1,6 +1,6 @@
 # [level 3] 대여 횟수가 많은 자동차들의 월별 대여 횟수 구하기 - 151139 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/151139?language=oracle) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/151139) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@ Empty
 
 ### 제출 일자
 
-2024년 07월 10일 12:28:33
+2024년 08월 15일 16:56:15
 
 ### 문제 설명
 
