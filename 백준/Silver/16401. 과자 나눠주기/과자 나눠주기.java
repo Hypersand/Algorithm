@@ -9,48 +9,33 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int M = Integer.parseInt(st.nextToken());
         int N = Integer.parseInt(st.nextToken());
-        int[] L = new int[N];
-
+        int[] arr = new int[N];
         st = new StringTokenizer(br.readLine());
-
-        int max = 0;
-
+        int minLength = 1;
+        int maxLength = 0;
         for (int i = 0; i < N; i++) {
-            L[i] = Integer.parseInt(st.nextToken());
-            max = Math.max(max, L[i]);
+            int length = Integer.parseInt(st.nextToken());
+            maxLength = Math.max(length, maxLength);
+            arr[i] = length;
         }
 
-        if (M > N) {
-            long cnt = 0;
+        int cnt = 0;
+        int mid = 0;
+        while (minLength <= maxLength) {
+            cnt = 0;
+            mid = (minLength + maxLength) / 2;
             for (int i = 0; i < N; i++) {
-                cnt += L[i];
+                cnt += arr[i] / mid;
             }
 
             if (cnt < M) {
-                System.out.println(0);
-                return;
-            }
-        }
-
-        int start = 1;
-        int end = max;
-
-        while (start <= end) {
-            int mid = (start + end) / 2;
-
-            long cnt = 0;
-            for (int i = 0; i < N; i++) {
-                cnt += L[i] / mid;
-            }
-
-            // 막대과자를 너무 많이 쪼갠 경우 -> 길이를 더 늘린다.
-            if (cnt >= M) {
-                start = mid + 1;
+                maxLength = mid - 1;
             } else {
-                end = mid - 1;
+                minLength = mid + 1;
             }
         }
 
-        System.out.println(end);
+        System.out.println(maxLength);
+
     }
 }
