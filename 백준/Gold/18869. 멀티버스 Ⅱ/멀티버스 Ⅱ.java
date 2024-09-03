@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -14,26 +12,34 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
         int N = Integer.parseInt(st.nextToken());
         arr = new int[M][N];
+        int[][] answer = new int[M][N];
         for (int i = 0; i < M; i++) {
+            int[] tmp = new int[N];
             st = new StringTokenizer(br.readLine());
-            List<Integer> list = new ArrayList<>();
             for (int j = 0; j < N; j++) {
-                list.add(Integer.parseInt(st.nextToken()));
+                arr[i][j] = Integer.parseInt(st.nextToken());
+                tmp[j] = arr[i][j];
             }
-            binarySearch(list, i);
+
+            Arrays.sort(tmp);
+            int[] order = findOrder(tmp, i);
+            for (int j = 0; j < N; j++) {
+                answer[i][j] = order[j];
+            }
         }
 
         int cnt = 0;
-        //i번째 우주와 j번째 우주를 비교
+        // 우주 비교
         for (int i = 0; i < M - 1; i++) {
             for (int j = i + 1; j < M; j++) {
                 boolean flag = true;
                 for (int k = 0; k < N; k++) {
-                    if (arr[i][k] != arr[j][k]) {
+                    if (answer[i][k] != answer[j][k]) {
                         flag = false;
                         break;
                     }
                 }
+
                 if (flag) {
                     cnt++;
                 }
@@ -43,20 +49,23 @@ public class Main {
         System.out.println(cnt);
     }
 
-    private static void binarySearch(List<Integer> list, int idx) {
-        for (int i = 0; i < list.size(); i++) {
+    private static int[] findOrder(int[] tmp, int order) {
+        int[] tmp2 = new int[tmp.length];
+        for (int i = 0; i < tmp.length; i++) {
             int start = 0;
-            int end = list.size() - 1;
-            int target = list.get(i);
+            int end = tmp.length - 1;
+            int key = arr[order][i];
             while (start <= end) {
                 int mid = (start + end) / 2;
-                if (list.get(mid) <= target) {
-                    start = mid + 1;
-                } else {
+                if (tmp[mid] >= key) {
                     end = mid - 1;
+                } else {
+                    start = mid + 1;
                 }
             }
-            arr[idx][i] = end;
+            tmp2[i] = start;
         }
+
+        return tmp2;
     }
 }
