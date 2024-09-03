@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.Map.Entry;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -10,42 +9,39 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int K = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
-        Map<String, Integer> map = new HashMap<>(); //학번, 순서
+        Map<String, Integer> map = new HashMap<>();
+        int idx = 1;
         for (int i = 0; i < L; i++) {
-            String str = br.readLine();
-            map.put(str, i);
+            String num = br.readLine();
+            map.put(num, idx++);
         }
 
         List<Node> list = new ArrayList<>();
-        for (Entry<String, Integer> entry : map.entrySet()) {
-            list.add(new Node(entry.getKey(), entry.getValue()));
+        for (String i : map.keySet()) {
+            list.add(new Node(i, map.get(i)));
         }
+
         Collections.sort(list);
-        StringBuilder sb = new StringBuilder();
-        if (K > list.size()) {
-            for (int i = 0; i < list.size(); i++) {
-                sb.append(list.get(i).num).append("\n");
-            }
-        } else {
-            for (int i = 0; i < K; i++) {
-                sb.append(list.get(i).num).append("\n");
-            }
+
+        for (int i = 0; i < K; i++) {
+            if (i >= list.size()) break;
+            System.out.println(list.get(i).key);
         }
-        System.out.println(sb);
+
     }
 
     private static class Node implements Comparable<Node> {
-        String num;
-        int idx;
+        private String key;
+        private int value;
 
-        public Node(String num, int idx) {
-            this.num = num;
-            this.idx = idx;
+        public Node(String key, int value) {
+            this.key = key;
+            this.value = value;
         }
 
         @Override
-        public int compareTo(Node o) {
-            return this.idx - o.idx;
+        public int compareTo(Node n) {
+            return this.value - n.value;
         }
     }
 }
