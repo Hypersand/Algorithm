@@ -1,4 +1,4 @@
--- FISH_NAME_INFO에서 물고기의 종류 별 물고기의 이름과 잡은 수 출력
+-- 물고기 종류 별 물고기의 이름과 잡은 수
 SELECT COUNT(F.ID) FISH_COUNT, N.FISH_NAME
 FROM FISH_INFO F
 JOIN FISH_NAME_INFO N
