@@ -3,46 +3,49 @@ import java.util.*;
 class Solution {
     public String solution(int[] numbers) {
         List<Node> list = new ArrayList<>();
-        for (int i = 0; i< numbers.length; i++) {
-            list.add(new Node(String.valueOf(numbers[i])));
+        for (int i = 0; i < numbers.length; i++) {
+            String value = String.valueOf(numbers[i]);
+            
+            int t = 0;
+            while(value.length() < 4) {
+                value += value.charAt(t);
+                t++;
+                if (t >= value.length()) t = 0;
+            }
+            list.add(new Node(i, numbers[i], Integer.parseInt(value)));
         }
         
         Collections.sort(list);
-        boolean flag = true;
+        StringBuilder sb = new StringBuilder();
         
-        String answer = "";
-        for (int i = 0; i<list.size(); i++) {
-            answer += list.get(i).num;
-            if (!list.get(i).num.equals("0")) {
-                flag = false;
-            }
+        boolean isZero = true;
+        
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(list.get(i).originValue);
+            if (list.get(i).originValue != 0) isZero = false;
         }
         
-        if (flag) {
-            return "0";
-        }
-        return answer;
+        if (isZero) return "0";
         
+        return sb.toString();
     }
     
     private static class Node implements Comparable<Node> {
-        private String num;
-        public Node(String num) {
-            this.num = num;
+        private int idx;
+        private int originValue;
+        private int value;
+        
+        private Node(int idx, int originValue, int value) {
+            this.idx = idx;
+            this.originValue = originValue;
+            this.value = value;
         }
         
-        @Override
         public int compareTo(Node node) {
-            int sum1 = Integer.parseInt(this.num + node.num);
-            int sum2 = Integer.parseInt(node.num + this.num); 
-            if (sum1 > sum2) {
-                return -1;
-            } else if (sum1 < sum2) {
-                return 1;
-            } else {
-                return 0;
+            if (this.value == node.value) {
+                return this.originValue - node.originValue;
             }
+            return node.value - this.value;
         }
-        
     }
 }
