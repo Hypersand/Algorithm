@@ -1,79 +1,52 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(String[] genres, int[] plays) {
-        Map<String, Integer> map = new HashMap<>();
+    public List<Integer> solution(String[] genres, int[] plays) {
+        Map<String, Integer> totalPlayMap = new HashMap<>();
+        Map<String, Integer> cntMap = new HashMap<>();
         
         for (int i = 0; i < genres.length; i++) {
-            map.put(genres[i], map.getOrDefault(genres[i], 0) + plays[i]);
+            totalPlayMap.put(genres[i], totalPlayMap.getOrDefault(genres[i], 0) + plays[i]);
         }
         
-        List<Music> musics = new ArrayList<>();
-        for (String key : map.keySet()) {
-            musics.add(new Music(key, map.get(key)));
-        }
+        PriorityQueue<Music> pq = new PriorityQueue<>();
         
-        Collections.sort(musics);
-        int t = 0;
+        for (int i = 0; i < genres.length; i++) {
+            pq.add(new Music(i, totalPlayMap.get(genres[i]), plays[i]));
+        }
         
         List<Integer> answerList = new ArrayList<>();
         
-        for (int i = 0; i<musics.size(); i++) {
-            Music music = musics.get(i);
-            List<Node> list = new ArrayList<>();
-            for (int j = 0; j<genres.length; j++) {
-                if (music.genre.equals(genres[j])) {
-                    list.add(new Node(j, plays[j]));
-                }
-                
-            }
-            
-            Collections.sort(list);
-            for (int j = 0; j<list.size(); j++) {
-                if (j > 1) break;
-                answerList.add(list.get(j).idx);
-            }
+        while(!pq.isEmpty()) {
+            Music music = pq.poll();
+            if (cntMap.get(genres[music.idx]) != null && cntMap.get(genres[music.idx]) == 2) continue;
+            cntMap.put(genres[music.idx], cntMap.getOrDefault(genres[music.idx], 0) + 1);
+            answerList.add(music.idx);
         }
         
-        
-        int[] answer = new int[answerList.size()];
-        
-        for (int i = 0; i<answer.length; i++) {
-            answer[i] = answerList.get(i);
-        }
-        
-        return answer;
+        return answerList;
     }
     
     private static class Music implements Comparable<Music> {
-        private String genre;
+        private int idx;
+        private int genrePlay;
         private int play;
         
-        private Music(String genre, int play) {
-            this.genre = genre;
+        private Music(int idx, int genrePlay, int play) {
+            this.idx = idx;
+            this.genrePlay = genrePlay;
             this.play = play;
         }
         
         public int compareTo(Music music) {
-            return music.play - this.play;
-        }
-    }
-    
-    private static class Node implements Comparable<Node> {
-        private int idx;
-        private int play;
-        
-        private Node(int idx, int play) {
-            this.idx = idx;
-            this.play = play;
-        }
-        
-        public int compareTo(Node node) {
-            if (this.play == node.play) {
-                return this.idx - node.idx;
+            if (this.genrePlay == music.genrePlay) {
+                if (this.play == music.play) {
+                    return this.idx - music.idx;
+                }
+                return music.play - this.play;
             }
             
-            return node.play - this.play;
+            return music.genrePlay - this.genrePlay;
         }
     }
 }
