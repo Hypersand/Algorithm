@@ -2,38 +2,40 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        int[] days = new int[progresses.length];
+        Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < progresses.length; i++) {
-            days[i] = (100 - progresses[i]) / speeds[i];
-            if (((100 - progresses[i]) % speeds[i]) != 0) days[i]++;
+            int remain = 100 - progresses[i];
+            int result = remain / speeds[i];
+            if (remain % speeds[i] != 0) {
+                result += 1;
+            }
+            
+            queue.add(result);
         }
-        
-        if (days.length == 1) return new int[]{1};
         
         List<Integer> list = new ArrayList<>();
-        int k = 0;
-        int tmp = 1;
-        for (int i = 1; i < days.length; i++) {
-            if (days[i] <= days[k]) {
-                tmp++;
-            } else {
-                list.add(tmp);
-                k = i;
-                tmp = 1;
+        
+        int cnt = 1;
+        int max = queue.poll();
+        while (!queue.isEmpty()) {
+            int num = queue.poll();
+            if (num <= max) {
+                cnt++;
+                continue;
             }
+            
+            list.add(cnt);
+            max = num;
+            cnt = 1;
         }
         
-        if (tmp != 1) {
-            list.add(tmp);
-        } else {
-            list.add(1);
+        list.add(cnt);
+        
+        int[] result = new int[list.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = list.get(i);
         }
         
-        int[] answer = new int[list.size()];
-        for (int i = 0; i < answer.length; i++) {
-            answer[i] = list.get(i);
-        }
-        
-        return answer;
+        return result;
     }
 }
