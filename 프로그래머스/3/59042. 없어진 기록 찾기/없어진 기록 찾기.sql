@@ -1,9 +1,7 @@
--- ANIMAL_INS : 동물 보호소에 들어온 동물의 정보
--- ANIMAL_OUTS : 입양 보낸 동물의 정보
--- 입양을 간 기록은 있는대, 보호소에 들어온 기록이 없는 동물 정보 조회
+-- 입양을 간 기록은 있는데, 보호소에 들어온 기록이 없는 동물 정보 조회
 SELECT O.ANIMAL_ID, O.NAME
 FROM ANIMAL_OUTS O
-LEFT OUTER JOIN ANIMAL_INS I
+LEFT JOIN ANIMAL_INS I
 ON O.ANIMAL_ID = I.ANIMAL_ID
 WHERE I.ANIMAL_ID IS NULL
-ORDER BY O.ANIMAL_ID, O.NAME;
+ORDER BY O.ANIMAL_ID;
