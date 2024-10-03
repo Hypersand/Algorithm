@@ -1,0 +1,11 @@
+-- 조회수가 가장 높은 중고거래 게시물에 대한 첨부 파일 경로 조회
+
+SELECT ('/home/grep/src/' || B.BOARD_ID || '/' || F.FILE_ID || F.FILE_NAME || F.FILE_EXT) FILE_PATH
+FROM USED_GOODS_BOARD B
+JOIN USED_GOODS_FILE F
+ON B.BOARD_ID = F.BOARD_ID
+WHERE B.VIEWS = (
+    SELECT MAX(VIEWS)
+    FROM USED_GOODS_BOARD
+)
+ORDER BY F.FILE_ID DESC;
