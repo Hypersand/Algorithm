@@ -8,12 +8,13 @@ class Solution {
         
         while (start <= end) {
             long mid = (start + end) / 2;
-            long num = 0;
-            for (int i = 0; i<times.length; i++) {
-                num += mid / times[i];
+            
+            long cnt = 0;
+            for (int i = 0; i < times.length; i++) {
+                cnt += mid / times[i];
             }
             
-            if (num < n) {
+            if (cnt < n) {
                 start = mid + 1;
             } else {
                 end = mid - 1;
