@@ -1,63 +1,89 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class Main {
     private static int N;
-    private static List<Egg> list = new ArrayList<>();
-    private static int[] remains;
+    private static int[] sArr;
+    private static int[] wArr;
+    private static boolean[] isDestroyed;
     private static int answer = 0;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        remains = new int[N];
+        sArr = new int[N];
+        wArr = new int[N];
+        isDestroyed = new boolean[N];
+
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            list.add(new Egg(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
-            remains[i] = list.get(i).s;
+            int s = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            sArr[i] = s;
+            wArr[i] = w;
         }
 
-        dfs(0, 0);
+        if (N == 1) {
+            System.out.println(0);
+            return;
+        }
+
+        backTracking(0, 0);
+
         System.out.println(answer);
     }
 
-    private static void dfs(int idx, int destroyCnt) {
+    private static void backTracking(int idx, int cnt) {
         if (idx == N) {
-            answer = Math.max(answer, destroyCnt);
+            answer = Math.max(answer, cnt);
             return;
         }
 
-        if (remains[idx] <= 0) {
-            dfs(idx + 1, destroyCnt);
+        if (isDestroyed[idx]) {
+            backTracking(idx + 1, cnt);
             return;
         }
 
         for (int i = 0; i < N; i++) {
-            if (i == idx) continue;
-            if (remains[i] <= 0) continue;
-            remains[idx] -= list.get(i).w;
-            remains[i] -= list.get(idx).w;
-            int cnt = 0;
-            if (remains[idx] <= 0) cnt++;
-            if (remains[i] <= 0) cnt++;
-            dfs(idx + 1, destroyCnt + cnt);
-            remains[idx] += list.get(i).w;
-            remains[i] += list.get(idx).w;
+            if (idx == i) continue;
+            if (isDestroyed[i]) continue;
+            int tmp1 = sArr[idx];
+            int tmp2 = sArr[i];
+            if (sArr[idx] - wArr[i] <= 0) {
+                if (sArr[i] - wArr[idx] <= 0) {
+                    isDestroyed[idx] = true;
+                    isDestroyed[i] = true;
+                    backTracking(idx + 1, cnt + 2);
+                    isDestroyed[idx] = false;
+                    isDestroyed[i] = false;
+                } else {
+                    isDestroyed[idx] = true;
+                    sArr[i] -= wArr[idx];
+                    backTracking(idx + 1, cnt + 1);
+                    sArr[i] = tmp2;
+                    isDestroyed[idx] = false;
+                }
+            } else {
+                if (sArr[i] - wArr[idx] <= 0) {
+                    sArr[idx] -= wArr[i];
+                    isDestroyed[i] = true;
+                    backTracking(idx + 1, cnt + 1);
+                    sArr[idx] = tmp1;
+                    isDestroyed[i] = false;
+
+                } else {
+                    sArr[idx] -= wArr[i];
+                    sArr[i] -= wArr[idx];
+                    backTracking(idx + 1, cnt);
+                    sArr[idx] = tmp1;
+                    sArr[i] = tmp2;
+                }
+            }
         }
 
-        answer = Math.max(answer, destroyCnt);
+        answer = Math.max(answer, cnt);
+
     }
-
-    private static class Egg {
-        private int s;  //내구도
-        private int w;  //무게
-
-        public Egg(int s, int w) {
-            this.s = s;
-            this.w = w;
-        }
-    }
-
 }
